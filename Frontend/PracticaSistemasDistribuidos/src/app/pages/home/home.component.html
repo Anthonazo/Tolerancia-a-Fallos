@@ -1,0 +1,35 @@
+<div class="container">
+    <div class="agregar-persona">
+        <h2>Agregar Persona</h2>
+        <div class="form-group">
+            <label for="cedula">Cédula:</label>
+            <input type="text" id="cedula" [(ngModel)]="persona.cedula" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" [(ngModel)]="persona.nombre" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="apellido">Apellido:</label>
+            <input type="text" id="apellido" [(ngModel)]="persona.apellido" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="edad">Edad:</label>
+            <input type="number" id="edad" [(ngModel)]="persona.edad" class="form-control">
+        </div>
+        <h2>Lista de Personas</h2>
+        <div class="personas-list">
+            <div *ngFor="let persona of personas" class="persona-item">
+                <div class="persona-details">
+                    <span><strong>Cédula:</strong> {{ persona.cedula }} </span><br>
+                    <span><strong>Nombre:</strong> {{ persona.nombre }} </span><br>
+                    <span><strong>Apellido:</strong> {{ persona.apellido }} </span><br>
+                    <span><strong>Edad:</strong> {{ persona.edad }} </span>
+                </div>
+                <button (click)="eliminarPersona(persona.cedula)" class="btn-delete">Eliminar</button>
+            </div>
+        </div>
+        <button (click)="agregarPersona()" class="btn btn-success">Agregar Persona</button>
+        <button (click)="actualizarPersona()" class="btn btn-primary">Actualizar Persona</button>
+    </div>
+</div>

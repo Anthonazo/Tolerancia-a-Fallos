@@ -1,0 +1,104 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:13
+    container_name: postgres
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - net
+
+  wildfly:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: wildfly
+    ports:
+      - "8080:8080"
+      - "9990:9990"
+    depends_on:
+      - postgres
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=mydatabase
+      - DB_USER=myuser
+      - DB_PASS=mypassword
+      - JAEGER_AGENT_HOST=jaegertracing
+      - JAEGER_AGENT_PORT=6831
+      - JAEGER_SAMPLER_TYPE=const
+      - JAEGER_SAMPLER_PARAM=1
+    networks:
+      - net
+
+  swagger-ui:
+    image: swaggerapi/swagger-ui
+    container_name: swagger-ui
+    ports:
+      - "8081:8080"
+    environment:
+      SWAGGER_JSON: http://localhost:8080/api/openapi.json
+    depends_on:
+      - wildfly
+    networks:
+      - net
+
+  swaggereditor:
+    depends_on:
+      - wildfly
+    image: swaggerapi/swagger-editor
+    ports:
+      - "9999:8080"
+    networks:
+      - net
+
+
+  jaegertracing:
+    depends_on:
+      - wildfly
+    image: jaegertracing/all-in-one:1.16.0
+    container_name: jaeger
+    ports:
+      - "16686:16686"
+      - "6831:6831/udp"
+    networks:
+      - net
+
+  dmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: info@jasoft.ec
+      PGADMIN_DEFAULT_PASSWORD: clave
+      TZ:  America/Guayaquil
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - net
+
+  angular:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    container_name: angular
+    ports:
+      - "4200:80"
+    depends_on:
+      - wildfly
+    networks:
+      - net
+
+volumes:
+  postgres_data:
+    
+networks:
+  net:
+    driver: bridge

@@ -1,0 +1,11 @@
+ec\edu\ups\Examen\service\JaegerConfig.class
+ec\edu\ups\Examen\business\GestionPersona.class
+ec\edu\ups\Examen\service\CORSFilter.class
+ec\edu\ups\Examen\service\ErrorMessage.class
+ec\edu\ups\Examen\service\PersonaService.class
+ec\edu\ups\Examen\dao\PersonaDao.class
+ec\edu\ups\Examen\service\PathBase.class
+ec\edu\ups\Examen\model\Persona.class
+ec\edu\ups\Examen\service\JAXActivator.class
+ec\edu\ups\Examen\business\GestionDatos.class
+ec\edu\ups\Examen\service\JaegerContexListener.class
